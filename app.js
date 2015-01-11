@@ -7,8 +7,7 @@ var log = require('./config/logger');
 
 log.info('Initializing packages');
 
-var	http 		= require('http'),
-	path 		= require('path');
+var	path 		= require('path');
 
 var express    = require('express'),        // call express
 	app        = express(),                 // define our app using express
