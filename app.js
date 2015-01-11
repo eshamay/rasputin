@@ -11,7 +11,8 @@ var	path 		= require('path');
 
 var express    = require('express'),        // call express
 	app        = express(),                 // define our app using express
-	bodyParser = require('body-parser');
+	bodyParser = require('body-parser'),
+	handlebars = require('express-handlebars').create({defaultLayout: 'main', extname: '.hbs'});
 
 // Controllers
 var Reports		= require('./controllers/Reports');
@@ -21,9 +22,9 @@ var Reports		= require('./controllers/Reports');
 var config = require('./config/config')();
 log.info('parsed configuration: %s', config.mode);
 app.set('views', path.join(__dirname, 'templates'));
-app.set('view options', { layout: true });
+//app.set('view options', { layout: true });
 app.set('view engine', 'hbs');
-app.engine('.hbs', require('consolidate').handlebars);
+app.engine('hbs', handlebars.engine);
 app.use(express.static(path.join(__dirname, 'public')));
 
 // configure app to use bodyParser()
