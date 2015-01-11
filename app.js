@@ -1,62 +1,63 @@
-// app.js
+(function(){
+	"use strict";
+	// app.js
+	// BASE SETUP
+	// =============================================================================
 
-// BASE SETUP
-// =============================================================================
+	var log = require("./config/logger");
 
-var log = require('./config/logger');
+	log.info("Initializing packages");
 
-log.info('Initializing packages');
+	var	path = require("path");
 
-var	path 		= require('path');
+	var express = require("express");        // call express
+	var app = express();                 // define our app using express
+	var bodyParser = require("body-parser");
+	var handlebars = require("express-handlebars").create({defaultLayout: "main", extname: ".hbs"});
 
-var express    = require('express'),        // call express
-	app        = express(),                 // define our app using express
-	bodyParser = require('body-parser'),
-	handlebars = require('express-handlebars').create({defaultLayout: 'main', extname: '.hbs'});
+	// Controllers
+	var reports = require("./controllers/Reports");
 
-// Controllers
-var Reports		= require('./controllers/Reports');
+	// Configuration
+	var config = require("./config/config")();
+	log.info("parsed configuration: %s", config.mode);
+	app.set("views", path.join(__dirname, "templates"));
+	//app.set("view options", { layout: true });
+	app.set("view engine", "hbs");
+	app.engine("hbs", handlebars.engine);
+	app.use(express.static(path.join(__dirname, "public")));
 
+	// configure app to use bodyParser()
+	// this will let us get the data from a POST
+	app.use(bodyParser.urlencoded({ extended: true }));
+	app.use(bodyParser.json());
 
-// Configuration
-var config = require('./config/config')();
-log.info('parsed configuration: %s', config.mode);
-app.set('views', path.join(__dirname, 'templates'));
-//app.set('view options', { layout: true });
-app.set('view engine', 'hbs');
-app.engine('hbs', handlebars.engine);
-app.use(express.static(path.join(__dirname, 'public')));
+	var port = process.env.PORT || config.port || 8080;        // set our port
 
-// configure app to use bodyParser()
-// this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+	// ROUTES FOR OUR API
+	// =============================================================================
+	var router = express.Router();              // get an instance of the express Router
 
-var port = process.env.PORT || config.port || 8080;        // set our port
+	router.use(function(req, res, next) {
+		log.info({req: req});
+		next();
+	});
 
-// ROUTES FOR OUR API
-// =============================================================================
-var router = express.Router();              // get an instance of the express Router
+	// ROUTES --------------------------------------------
+	router.route("/rasputin/random")
+		// render a randomly chosen report
+		.get(function(req, res) {
+			reports.run(req, res);
+		});
 
-router.use(function(req, res, next) {
-	log.info({req: req});
-	next();
-});
+	// more routes for our API will happen here
 
-// ROUTES --------------------------------------------
-router.route('/rasputin/random')
-	// render a randomly chosen report
-    .get(function(req, res) {
-		Reports.run(req, res);
-    });
+	// REGISTER OUR ROUTES -------------------------------
+	// all of our routes will be prefixed with /api
+	app.use("/", router);
 
-// more routes for our API will happen here
-
-// REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
-app.use('/', router);
-
-// START THE SERVER
-// =============================================================================
-app.listen(port);
-log.info('Magic happens on port ' + port);
+	// START THE SERVER
+	// =============================================================================
+	app.listen(port);
+	log.info("Magic happens on port " + port);
+})();

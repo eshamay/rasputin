@@ -1,3 +1,7 @@
+body {
+	padding-top: 70px;
+}
+
 pre {
     white-space: pre-wrap;       /* CSS 3 */
     white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */

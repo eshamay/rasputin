@@ -1,9 +1,9 @@
 var BaseController 	= require("./Base"),
 	View 			= require("../views/Base"),
 	ReportFile		= require("../report_file"),
-	Random 			= require('../random_util');
+	Random 			= require("../random_util");
 
-var defaultFilename = 'rasputin_reports.txt';
+var defaultFilename = "rasputin_reports.txt";
 
 module.exports = BaseController.extend({ 
 	name: "Random Reports",
@@ -15,8 +15,12 @@ module.exports = BaseController.extend({
 			var report = reports[index]; 
 			var date = report.day + ' ' + report.month + ' ' + report.year;
 
-			var v = new View(res, 'random_report');
-			v.render({date: date, report: report.text});
+			var v = new View(res, "random_report");
+			v.render({
+				title: "Rasputin's coming and goings",
+				date: date, 
+				report: report.text
+			});
 		});
 
 	}
