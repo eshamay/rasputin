@@ -3,20 +3,7 @@
 // BASE SETUP
 // =============================================================================
 
-// call the packages we need
-var Logger 		= require('bunyan');
-var log 		= new Logger({
-  name: 'server',
-  streams: [
-    {
-      stream: process.stdout,
-      level: 'debug'
-    },
-  ],
-	serializers: { 
-		req: Logger.stdSerializers.req,
-	}
-});
+var log = require('./config/logger');
 
 log.info('Initializing packages');
 
@@ -56,28 +43,20 @@ router.use(function(req, res, next) {
 	next();
 });
 
-// on routes that end in /bears
-// ----------------------------------------------------
+// ROUTES --------------------------------------------
 router.route('/rasputin/random')
 	// render a randomly chosen report
     .get(function(req, res) {
 		Reports.run(req, res);
     });
 
-
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-router.get('/', function(req, res) {
-    res.render('rasputin_report', { title: 'some title' } );
-});
-
 // more routes for our API will happen here
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
-app.use('/api', router);
+app.use('/', router);
 
 // START THE SERVER
 // =============================================================================
 app.listen(port);
 log.info('Magic happens on port ' + port);
-
