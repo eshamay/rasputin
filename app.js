@@ -82,41 +82,19 @@
 	// =============================================================================
 	var router = express.Router();              // get an instance of the express Router
 
-	// As with any middleware it is quintessential to call next()
-	// if the user is authenticated
-	var isAuthenticated = function (req, res, next) {
-		if (req.isAuthenticated()) {
-			log.info("Already authenticated");
-			return next();
-		}
-		log.info("auth user: " + req.user);
-		log.info("not authenticated");
-		authenticate(req, res, next);
-	}
-
-	var authenticate = function(req, res, next) {
-		passport.authenticate('wsfed-saml2', function(err, user, info) {
-			if (err) { return next(err); }
-			if (!user) { return res.redirect('/login'); }
-		})(req, res, next);
-	}
-
+    // run for all routes
 	router.use(function(req, res, next) {
 		log.info({req: req});
 		next();
 	});
-
+    
 	router.route("/")
-		.get(passport.authenticate('wsfed-saml2'), function(req, res, next) {
+		.get(passport.authenticate('wsfed-saml2'), function(req, res) {
 			res.send("<h1>user email: " + req.user.email + "</h1>");
 		});
 
 	router.route("/authenticated")
-		.get(passport.authenticate('wsfed-saml2'), function(req, res, next) {
-			log.info("authenticating");
-			res.send("<h1>user: " + req.user + "</h1>");
-		})
-		.post(passport.authenticate('wsfed-saml2'), function(req, res, next) {
+		.post(passport.authenticate('wsfed-saml2'), function(req, res) {
 			log.info("authenticating");
 			res.send("<h1>user: " + req.user.email + "</h1>");
 		});
@@ -124,7 +102,7 @@
 	// ROUTES --------------------------------------------
 	router.route("/rasputin/random")
 		// render a randomly chosen report
-		.get(function(req, res) {
+		.get(passport.authenticate('wsfed-saml2'), function(req, res) {
 			reports.run(req, res);
 		});
 
