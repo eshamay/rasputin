@@ -32,7 +32,8 @@
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(bodyParser.json());
 
-	var port = process.env.PORT || config.port || 8080;        // set our port
+	//var port = process.env.PORT || config.port || 8080;        // set our port
+	var port = config.port || 8080;        // set our port
 
 	// AUTHENTICATION & SSO
 	// =============================================================================
