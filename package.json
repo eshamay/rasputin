@@ -1,0 +1,39 @@
+{
+  "name": "Rasputin",
+  "version": "0.0.0",
+  "description": "Website showcasing reports of Rasputin's behavior",
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "body-parser": "^1.10.1",
+    "bunyan": "^1.2.3",
+    "consolidate": "^0.10.0",
+    "express-handlebars": "^1.1.0",
+    "express": "^4.10.7",
+    "handlebars": "^2.0.0",
+    "express3-handlebars": "^0.5.2",
+    "less-middleware": "^1.0.4",
+    "mongoose": "^3.8.21",
+    "passport": "^0.2.1",
+    "passport-azure-ad": "^0.0.3",
+    "split": "^0.3.2",
+    "through": "^2.3.6",
+    "underscore": "^1.7.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eshamay/rasputin.git"
+  },
+  "author": "Eric Shamay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eshamay/rasputin/issues"
+  },
+  "homepage": "https://github.com/eshamay/rasputin"
+}
